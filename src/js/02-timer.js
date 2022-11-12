@@ -46,9 +46,26 @@ const timer = document.querySelector("timer");
 const startCountdown = () => {
     const now = new Date().getTime();
     const countdown = new Date(countdownDate).getTime();
+    const difference = (countdown - now) / 1000;
+};
+// daysElem.innerHTML = formatTime(days, "day");
+// hoursElem.innerHTML = formatTime(hours, "hour");
+// minutesElem.innerHTML = formatTime(minutes, "minute");
+// secondsElem.innerHTML = formatTime(seconds, "second");
 
-    daysElem.innerHTML = formatTime(days, "day");
-    hoursElem.innerHTML = formatTime(hours, "hour");
-    minutesElem.innerHTML = formatTime(minutes, "minute");
-    secondsElem.innerHTML = formatTime(seconds, "second");
+
+let timerInterval
+window.addEventListener("load", () => {
+    startCountdown();
+    timerInterval = setInterval(startCountdown, 1000);
+});
+const stCountdown = () => {
+    const now = new Date().getTime();
+    const countdown = new Date(countdownDate).getTime();
+
+    const difference = (countdown - now) / 1000;
+
+    if (difference < 1) {
+        endCountdown();
+    }
 };
