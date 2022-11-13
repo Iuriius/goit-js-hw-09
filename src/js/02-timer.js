@@ -2,6 +2,8 @@ const flatpickr = require("flatpickr");
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
+let targetDate = null;
+
 const options = {
     enableTime: true,
     dateFormat: "Y-m-d H:i",
@@ -9,12 +11,12 @@ const options = {
     defaultDate: new Date(),
     minuteIncrement: 1,
     onClose(selectedDates) {
-        console.log(selectedDates[0]);
+        targetDate = selectedDates[0];
     },
 };
 
 const timePicker = document.querySelector("#datetime-picker");
-flatpickr(timePicker, { options });
+flatpickr(timePicker, options);
 
 function convertMs(ms) {
     // Number of milliseconds per unit of time
@@ -42,30 +44,3 @@ const hoursElem = document.querySelector("data-hours");
 const minutesElem = document.querySelector("data-minutes");
 const secondsElem = document.querySelector("data-seconds");
 const timer = document.querySelector("timer");
-
-const startCountdown = () => {
-    const now = new Date().getTime();
-    const countdown = new Date(countdownDate).getTime();
-    const difference = (countdown - now) / 1000;
-};
-// daysElem.innerHTML = formatTime(days, "day");
-// hoursElem.innerHTML = formatTime(hours, "hour");
-// minutesElem.innerHTML = formatTime(minutes, "minute");
-// secondsElem.innerHTML = formatTime(seconds, "second");
-
-
-let timerInterval
-window.addEventListener("load", () => {
-    startCountdown();
-    timerInterval = setInterval(startCountdown, 1000);
-});
-const stCountdown = () => {
-    const now = new Date().getTime();
-    const countdown = new Date(countdownDate).getTime();
-
-    const difference = (countdown - now) / 1000;
-
-    if (difference < 1) {
-        endCountdown();
-    }
-};
