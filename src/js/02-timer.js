@@ -1,9 +1,18 @@
-const flatpickr = require("flatpickr");
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
-let targetDate = null;
+const refs = {
+    input: document.querySelector('#datetime-picker'),
+    startButton: document.querySelector('button'),
+    days: document.querySelector('[data-days]'),
+    hours: document.querySelector('[data-hours]'),
+    minutes: document.querySelector('[data-minutes]'),
+    seconds: document.querySelector('[data-seconds]'),
+};
+refs.startButton.disabled = true;
+console.log(refs.input);
 
+const currentTime = new Date()
 const options = {
     enableTime: true,
     dateFormat: "Y-m-d H:i",
@@ -11,12 +20,32 @@ const options = {
     defaultDate: new Date(),
     minuteIncrement: 1,
     onClose(selectedDates) {
-        targetDate = selectedDates[0];
+        const targetDate = selectedDates[0];
+        if (targetDate < currentTime) {
+            alert('Please choose a date in the future');
+            refs.startButton.disabled = true;
+            return
+        } else { refs.startButton.disabled = false; }
     },
 };
 
-const timePicker = document.querySelector("#datetime-picker");
-flatpickr(timePicker, options);
+refs.startButton.addEventListener('click', changeTimerValue)
+function changeTimerValue() {
+    refs.startButton.disabled = true;
+    refs.input.disabled = true;
+    let timerId = setInterval(() => {
+        let restTime = new Date(refs.input.value) - new Date();
+        if (restTime <= 0) { clearInterval(timerId) }
+        let timerInfo = convertMs(restTime);
+        Object.entries(timerInfo).forEach(([name, value]) => {
+            refs[name].textContent = addZero(value)
+        })
+    }, 1000)
+}
+
+function addZero(value) {
+    return String(value).padstart(2, "0")
+}
 
 function convertMs(ms) {
     // Number of milliseconds per unit of time
@@ -24,7 +53,6 @@ function convertMs(ms) {
     const minute = second * 60;
     const hour = minute * 60;
     const day = hour * 24;
-
     // Remaining days
     const days = Math.floor(ms / day);
     // Remaining hours
@@ -36,11 +64,4 @@ function convertMs(ms) {
 
     return { days, hours, minutes, seconds };
 }
-
-let countdownDate = new Date();
-
-const daysElem = document.querySelector("data-days");
-const hoursElem = document.querySelector("data-hours");
-const minutesElem = document.querySelector("data-minutes");
-const secondsElem = document.querySelector("data-seconds");
-const timer = document.querySelector("timer");
+flatpickr(refs.input, options);
