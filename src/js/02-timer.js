@@ -35,7 +35,7 @@ function changeTimerValue() {
     refs.input.disabled = true;
     let timerId = setInterval(() => {
         let restTime = new Date(refs.input.value) - new Date();
-        if (restTime <= 0) { clearInterval(timerId) }
+        if (restTime <= 1000) { clearInterval(timerId) }
         let timerInfo = convertMs(restTime);
         Object.entries(timerInfo).forEach(([name, value]) => {
             refs[name].textContent = addZero(value)
@@ -44,7 +44,7 @@ function changeTimerValue() {
 }
 
 function addZero(value) {
-    return String(value).padstart(2, "0")
+    return String(value).padStart(2, "0")
 }
 
 function convertMs(ms) {
